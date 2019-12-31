@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const path = require('path');
 const flash = require('connect-flash'); //웹브라우저에 1회성 메세지를 만들때.
+const { sequelize } = require('./models');
+
 require('dotenv').config();
 
 //const, let
@@ -11,28 +13,31 @@ require('dotenv').config();
 //let 변수선언, 값 변경 가능.
 //const로 선언한 객체는 객체의 요소값은 변경이 가능.
 
+console.log("::: env ::::", process.env.NODE_ENV)
+
 const indexRouter = require('./routes/page');
 const userRouter = require('./routes/user');
+sequelize.sync();
 
 const app = express();
 
 
-app.set('view engine','ejs');
+app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.set('port', process.env.PORT || 8001);
 
 app.use(morgan('dev'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
-app.use(express.urlencoded({extended : false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(session({
-    resave : false,
-    saveUninitialized : false,
-    secret : process.env.COOKIE_SECRET,
-    cookie : {
-        httpOnly : true,
-        secure : false,
+    resave: false,
+    saveUninitialized: false,
+    secret: process.env.COOKIE_SECRET,
+    cookie: {
+        httpOnly: true,
+        secure: false,
     },
 }));
 
