@@ -15,17 +15,17 @@ db.User = require('./user')(sequelize, Sequalize);
 db.Post = require('./post')(sequelize, Sequalize);
 db.HashTag = require('./hashtag')(sequelize, Sequalize);
 
-db.User.hasMany(db.Post);
-db.Post.belongsTo(db.User);
+db.User.hasMany(db.Post); //1:N
+db.Post.belongsTo(db.User); //N:1
 
 //ManyToMany관계에서는 새로운 테이블이 생성된다.
-db.Post.belongsToMany(db.HashTag, {through : 'PostHashtag'});
-db.HashTag.belongsToMany(db.Post, {through : 'PostHashtag'});
+db.Post.belongsToMany(db.HashTag, {through : 'post_hashtag'}); //N:N
+db.HashTag.belongsToMany(db.Post, {through : 'post_hashtag'}); //N:N
 
-db.User.belongsToMany(db.User, { through : 'Follow', as: 'Followers', foreignKey : 'followingId'}); //일반인
-db.User.belongsToMany(db.User, { through : 'Follow', as: 'Following', foreignKey : 'followerId'});
+db.User.belongsToMany(db.User, { through : 'follow', as: 'Followers', foreignKey : 'followingId'}); //일반인.
+db.User.belongsToMany(db.User, { through : 'follow', as: 'Following', foreignKey : 'followerId'});  //유명한 사람.
 
-db.User.belongsToMany(db.Post, {through : 'Like'});
-db.Post.belongsToMany(db.User, {through : 'Like'});
+db.User.belongsToMany(db.Post, {through : 'like'});
+db.Post.belongsToMany(db.User, {through : 'like'});
 
 module.exports = db;
