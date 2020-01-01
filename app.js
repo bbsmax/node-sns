@@ -17,6 +17,8 @@ console.log("::: env ::::", process.env.NODE_ENV)
 
 const indexRouter = require('./routes/page');
 const userRouter = require('./routes/user');
+const authRouter = require('./routes/auth');
+
 sequelize.sync();
 
 const app = express();
@@ -43,7 +45,7 @@ app.use(session({
 
 app.use(flash());
 app.use('/', indexRouter);
-
+app.use('auth', authRouter);
 // app.use((req, res, next) => {
 //     const err = new Error('Not Found');
 //     err.status = 404;
